@@ -1,9 +1,9 @@
 #!/bin/bash
 
-sleep 10
+ADAPTER=wlan1
 
-sudo ip link set wlan1 down
-sudo iw wlan1 set monitor none
-sudo ip link set wlan1 up
+sudo ip link set $ADAPTER down
+sudo iw $ADAPTER set monitor none
+sudo ip link set $ADAPTER up
 
-python /root/Python-Wifi-Probe-Monitor/wifi-me-niet.py --interface wlan1
+python ./wifi-me-niet.py --interface $ADAPTER
