@@ -15,8 +15,9 @@ sudo ip link set wlan1 up
 
 start the scanner
 
+<pre>
 ./wifi-me-niet.py --interface wlan1
-
+</pre>
 
 Or, edit 'wifi-me-niet' file and set the correct wireless adapter.
 
