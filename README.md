@@ -17,3 +17,10 @@ start the scanner
 
 ./wifi-me-niet.py --interface wlan1
 
+
+Or, edit 'wifi-me-niet' file and set the correct wireless adapter.
+
+Make the file executable using :  chmod +x wifi-me-niet
+
+And then run the ./wifi-me-niet script.
+
