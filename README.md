@@ -5,7 +5,7 @@ Wifi-me-niet scanner &amp; submitter
 
 Usage:
 
-Set your network-adapter in monitor mode.
+Set your network-adapter in monitor mode. (make sure your wireless adapter supports monitoring mode)
 
 <pre>
 sudo ip link set wlan1 down
