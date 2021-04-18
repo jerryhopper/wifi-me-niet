@@ -1,0 +1,40 @@
+# This docker-compose.yml file shows how Supervisor program(s) are reloaded automatically when file changes detected
+# under web root /var/www. There are two environment variables used:
+#     1. AUTORELOAD_PROGRAMS: space-separated Supervisor program(s) to be reloaded when file changes detected. e.g.,
+#            AUTORELOAD_PROGRAMS: "swoole"       # Autoreload Supervisor program "swoole" only.
+#            AUTORELOAD_PROGRAMS: "swoole nginx" # Autoreload Supervisor program "swoole" and "nginx".
+#     2. AUTORELOAD_ANY_FILES: Optional. If set to "true", "1", "yes", or "y", reload Supervisor program(s) when any
+#        files under the root directory (/var/www in this example) is changed; otherwise, reload only when PHP file(s)
+#        are changed.
+#
+version: '3'
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOTPASS}
+    volumes:
+      - ./database:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  app:
+    #image: phpswoole/swoole
+    build: .
+    environment:
+      AUTORELOAD_PROGRAMS: "swoole"
+      AUTORELOAD_ANY_FILES: 0
+      APP_HOST: https://wifi-me-niet.jerryhopper.com
+      APP_DBHOST: db
+      APP_DBNAME: ${APP_DBNAME}
+      APP_DBUSER: ${APP_DBUSER}
+      APP_DBPASS: ${APP_DBPASS}
+    ports:
+      - 88:9501
+    volumes:
+      - ./rootfilesystem/var/www:/var/www
+      - ./rootfilesystem/app:/var/app

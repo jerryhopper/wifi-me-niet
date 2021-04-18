@@ -25,3 +25,8 @@ Make the file executable using :  chmod +x wifi-me-niet
 
 And then run the ./wifi-me-niet script.
 
+
+
+Compatible USB adapter
+
+https://www.wirelesshack.org/best-kali-linux-compatible-usb-adapter-dongles.html
