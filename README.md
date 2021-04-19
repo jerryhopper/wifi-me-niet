@@ -1,32 +1,18 @@
 # wifi-me-niet
+
 Wifi-me-niet scanner &amp; submitter
 
+De wifi-me-niet scanner is een wapen tegen het wifi-tracken in publieke ruimtes.
 
 
-Usage:
+## wifi-me-niet client.
 
-Set your network-adapter in monitor mode. (make sure your wireless adapter supports monitoring mode)
+De wifi-me-niet client is een python script dat -met de juiste hardware- wifi beacons opvangt, en de mac-adressen verstuurt naar de wifi-me-niet website.
 
-<pre>
-sudo ip link set wlan1 down
-sudo iw wlan1 set monitor none
-sudo ip link set wlan1 up
-</pre>
+[client/README.md](README.md)
 
-start the scanner
+## wifi-me-niet website
 
-<pre>
-./wifi-me-niet.py --interface wlan1
-</pre>
+De wifi-me-niet website is het backend voor de wifi-me-niet client. Dit backend accepteert de mac-adressen van de client, en submit deze naar de wifi-tracking optout website van het MOA
 
-Or, edit 'wifi-me-niet' file and set the correct wireless adapter.
-
-Make the file executable using :  chmod +x wifi-me-niet
-
-And then run the ./wifi-me-niet script.
-
-
-
-Compatible USB adapter
-
-https://www.wirelesshack.org/best-kali-linux-compatible-usb-adapter-dongles.html
+[server/README.md](README.md)
