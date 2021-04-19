@@ -59,11 +59,11 @@
 
     <section class="jumbotron text-center">
         <div class="container">
-            <h1 class="jumbotron-heading">WIFI-ME-NIET!</h1>
+            <h1 class="jumbotron-heading"><a href="#hetprobleem">WIFI-ME-NIET!</a></h1>
             <p class="lead text-muted">In de openbare ruimte moeten mensen zich onbespied kunnen bewegen, desondanks word op steeds meer plaatsen gebruik gemaakt van wifi-tracking.</p>
             <p>
-                <a href="#" class="btn btn-primary my-2">Automatische opt-out</a>
-                <a href="#" class="btn btn-secondary my-2">Manuele opt-out</a>
+                <a href="#oplossing" class="btn btn-primary my-2">Automatische opt-out</a>
+                <a href="#optout" class="btn btn-secondary my-2">Manuele opt-out</a>
             </p>
         </div>
     </section>
@@ -216,7 +216,7 @@
                     <div class="card mb-4 box-shadow">
 
                         <div class="card-body">
-                            <h3 class="card-title">Het probleem.</h3>
+                            <a id="hetprobleem"></a><h3 class="card-title">Wifi-me-niet, Het probleem.</h3>
                             <p class="card-text">Het volgen van mensen op straat, in winkelcentra of stations via hun mobiele apparatuur is voor bedrijven slechts in zeer weinig gevallen toegestaan. Wifitracking en ook andere digitale middelen om personen te volgen zijn slechts onder zeer strikte voorwaarden toegestaan. Toch word er in meer dan 200 gemeenten gebruikt gemaakt van deze trackingmethode om zo bezoekersaantallen in gemeentes en evenementen te meten.</p>
 
                             <h5 class="card-title">Wie doet aan wifi-tracking</h5>
@@ -246,7 +246,7 @@
                     <div class="card mb-4 box-shadow">
 
                         <div class="card-body">
-                            <h3 class="card-title">Een oplossing.</h3>
+                            <a id="oplossing"></a><h3 class="card-title">Automatische opt-out: Een oplossing?</h3>
                             <p class="card-text">Wanneer je een privacy-probleem wil aankaarten, kun je terecht bij de autoriteit persoonsgegevens. Toen ook in Enschede wifi-tracking werd ingezet, diende Dave Borghuis in 2017 een klacht. Het werd een <a href="http://daveborghuis.nl/wp/wifi-tracking/">lange moeizame weg</a> waarvan het einde bijna in zicht is.</p>
 
                             <p class="card-text">Maar de branche heeft zelf ook een oplossing aangedragen, de mogelijkheid voor opt-out.  Het probleem is echter dat niemand hier vanaf weet. Geen postbus51 reklame, niets! Er staan wel promotie-filmpjes online, die nog geen 100 views hebben.  </p>
@@ -255,7 +255,7 @@
                             <p class="card-text">Natuurlijk kun je al je apparaten op de opt-out lijst zetten, en je vrienden en kennissen informeren over de wifi-volgmethodes - maar dat betekend dat je mensen informeert over hoe te wapenen tegen wifi-tracking wat op zich al in strijd is met de privacywet. Een beetje de 'omgekeerde wereld' - En dat bracht mij op hetetvolgende concept.</p>
 
                             <h5 class="card-title">Dezelfde techniek tegen de wifi-trackers gebruiken</h5>
-                            <p class="card-text">Omdat wifi-mac adressen verzamelen geen hogere wiskunde is, zocht ik naar een meer praktische oplossing. Met als doel: Verzamel Mac-adressen, en stuur deze naar de opt-out lijst.</p>
+                            <p class="card-text">Omdat wifi-mac adressen verzamelen geen hogere wiskunde is, zocht ik naar een meer praktische oplossing met als doel: Verzamel Mac-adressen, en stuur deze naar de opt-out lijst.</p>
                             <p class="card-text">Om dit te bewerkstelligen gebruikte ik een singleboard-computer van rond de 25 euro, en een wifi adapter die monitor-mode ondersteunt. Na wat programmeerwerk was deze website, en een gitrepository het resutaat: Een DIY anti-wifitracker</p>
 
                             <h5 class="card-title">Automatisch afmelden, zodat men opnieuw expliciet toestemming moet vragen</h5>
@@ -263,6 +263,7 @@
 
                             <p class="card-text">Maar het doel waarom ik dit doe, is in het belang van het individu dat geen weet heeft van deze trackingmethose. Commerciele bedrijven hebben een commercieel belang bij het verzamelen van deze bezoekersstromen.</p>
 
+                            <p class="card-text">Who's the bad guy in this picture?</p>
 
                             <h5 class="card-title">Waar vind je mijn wifi-me-niet-tracker?</h5>
                             <p class="card-text">Op dit moment van schrijven, staat de 'wifi-me-niet' tracker thuis bij het raam. Wanneer ik het huis uit ga, neem ik hem (in de auto) mee waardoor alle passerende aparaten met wifi worden toegevoegd aan de opt-out lijst van het MOA</p>
@@ -286,7 +287,7 @@
                     <div class="card mb-4 box-shadow">
 
                         <div class="card-body">
-                            <h3 class="card-title">Manuele op-out.</h3>
+                            <a id="optout"></a><h3 class="card-title">Manuele op-out.</h3>
                             <p class="card-text">Wilt u zelf uw apparaat afmelden bij de desbetreffende dienstverlener, dan kan dat bij de onderstaande wifi-tracker aanbieders.</p>
                             <p class="card-text">
                                 <ul>
@@ -296,8 +297,8 @@
                                     <li>MOA - <a href="https://www.wifi-me-niet.nl/" target="_blank">opt-out</a></li>
                                 </ul>
                             </p>
-                            <p class="card-text">.</p>
-
+                            <p class="card-text">Maar let op! Er zijn waarschijnlijk veel meer bedrijven die wifi-tracking gebruiken. Het Expertise Center voor Marketing Insights, Onderzoek en Analytics (MOA) doet de meest nobele poging, en verplicht haar leden gebruik te maken van de opt-out lijst. </p>
+                            <p class="card-text">Voor nu, is dit de enige manier om je handmatig af te melden voor publieke volgsystemen tenzij je bereid bent de bluetooth en wifi fuctionaliteit op je smartphone uit te schakelen.</p>
 
 
 
@@ -322,6 +323,8 @@
         </p>
         <p><a href="https://wifi-me-niet.jerryhopper.com">Wifi-me-niet</a> is met de grootste zorg voor jouw privacy tot stand gekomen. De broncode vind u op <a href="https://github.com/jerryhopper/wifi-me-niet">github</a> </p>
         <p>Meer lezen of weten over Jerry??  lees zijn artikelen op <a href="https://foryourinformation.nl">foryourinformation.nl</a> of lees zijn <a href="https://blog.jerryhopper.com/">engelstalige blog </a>.</p>
+        <hr>
+        <p>Build with <a target="_blank" href="https://getbootstrap.com/">Bootstrap</a> on <a target="_blank" href="https://www.swoole.co.uk/">swoole-php</a>, a High Performance Programmatic Server for PHP with Async IO, Coroutines and Fibers.</p>
     </div>
 </footer>
 
