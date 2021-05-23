@@ -11,7 +11,7 @@ De wifi-me-niet client is een python script dat -met de juiste hardware- wifi be
 
 Meer over de [Wifi-me-niet Client](client/README.md)
 
-## wifi-me-niet website
+## wifi-me-niet server
 
 De wifi-me-niet website is het backend voor de wifi-me-niet client. Dit backend accepteert de mac-adressen van de client, en submit deze naar de wifi-tracking optout website van het MOA
 
