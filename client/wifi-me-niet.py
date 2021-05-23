@@ -19,36 +19,39 @@ import sys
 import redis
 from datetime import timedelta
 from OuiLookup import OuiLookup
-from io import StringIO
-from contextlib import redirect_stdout
+
 
 from src.monitor import setup_monitor
 from src.notify import donotify
 
-#  OuiLookup().query(pkt.addr2.upper())[0][pkt.addr2.upper().replace(":", "")]
-#print( str( OuiLookup().query( "00:00:00:00:13:37" )[0]["000000001337"] ) );
-
-
-#exit()
 
 #OuiLookup().update()
 
 
-
-# in minutes
+# Expire in minutes
 SETTINGS_REDISEXPIRE=24*60
 # in minutes
 SETTINGS_RECENTSEEN=5
-SETTINGS_SENDCUE=15
+# amount of macs before being submitted.
+SETTINGS_SENDCUE=10
+# verbosity
+SETTINGS_VERBOSE=True
+
+# notify-url.
+SETTINGS_NOTIFYURL="https://wifi-me-niet.jerryhopper.com/api/donotfollowtest"
+
+
+
 
 r = redis.Redis(charset="utf-8", decode_responses=True)
 
 
 def clear_redis(what):
-	if what == "" or what =="all":
+	if what =="all":
 		r.flushall()
-		print("Redis data deleted!")
-		exit()
+		if SETTINGS_VERBOSE == True:
+			print("Redis data deleted!")
+		#exit()
 
 
 
@@ -67,7 +70,9 @@ def set_received(identifier,pkt):
 	macinfo["signal"]= str(pkt.dBm_AntSignal)
 	macinfo["rate"] = str(pkt.Rate)
 	# + pkt.addr2.upper()
-	print( get_temp()+' '+str(datetime.now()) +' ' + pkt.addr1  +' ' + pkt.addr2  + ' '+ pkt.addr3 +' ' +' ** dbm: '+ str(pkt.dBm_AntSignal) +'  rate: ' + str(pkt.Rate)  + ' SSID:"' + str(pkt.info,'utf-8')+'"' )
+	if SETTINGS_VERBOSE == True:
+		print( get_temp()+' '+str(datetime.now()) +' ' +  pkt.addr2  + ' ' + str(OuiLookup().query(pkt.addr2.upper())[0][pkt.addr2.upper().replace(":", "")])  +' ** dbm: '+ str(pkt.dBm_AntSignal) +'  rate: ' + str(pkt.Rate)  + ' SSID:"' + str(pkt.info,'utf-8')+'"' )
+		#print( get_temp()+' '+str(datetime.now()) +' ' + pkt.addr1  +' ' + pkt.addr2  + ' '+ pkt.addr3 +' ' +' ** dbm: '+ str(pkt.dBm_AntSignal) +'  rate: ' + str(pkt.Rate)  + ' SSID:"' + str(pkt.info,'utf-8')+'"' )
 	#print( get_temp()+' '+str(datetime.now()) +' 00:00:00:??:??:??'  + ' '+ str(OuiLookup().query(pkt.addr2.upper())[0][pkt.addr2.upper().replace(":", "")]) + ' '+' ** dbm: '+ macinfo['signal'] +'  rate: ' + macinfo['rate']  + ' SSID:"' + macinfo['ssid'] + '"' )
 	# set the ignore flag in redis.
 	macJson = json.dumps(macinfo)
@@ -77,8 +82,8 @@ def set_received(identifier,pkt):
 
 	r.hset("cue", identifier , macJson )
 	if r.hlen("cue") > SETTINGS_SENDCUE:
-	    donotify( r.hgetall("cue") )
-	    r.delete("cue")
+		donotify( r.hgetall("cue"),SETTINGS_NOTIFYURL )
+		r.delete("cue")
 
 
 def get_identifier(identifier):
@@ -92,7 +97,8 @@ def get_identifier(identifier):
 
 def is_root():
 	if not os.geteuid() ==0:
-		print("Error! you must be root!")
+		if SETTINGS_VERBOSE == True:
+			print("Error! you must be root!")
 		exit(1)
 
 
@@ -123,17 +129,37 @@ def handle_packet(pkt):
 		#	print( '>>SKIP>>> '+ get_temp()+' '+str(datetime.now()) +' ' + pkt.addr1  +' ' + pkt.addr2  + ' '+ pkt.addr3 +' ' +' ** dbm: '+ str(pkt.dBm_AntSignal) +'  rate: ' + str(pkt.Rate)  + ' SSID:"' + str(pkt.info,'utf-8')+'"' )
 
 def main():
-	logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',filename='wifiscanner.log',level=logging.DEBUG) #setup logging to file
-	logging.info('\n'+'Wifi-me-niet Scanner Initialized'+ '\n') #announce that it has started to log file with yellow color
-	print('\n' + '\033[93m' + 'Wifi-me-niet Scanner Initialized' + '\033[0m' + '\n') #announce that it has started to command line with yellow color		(/n is newline)
 	import argparse
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--interface', '-i', default="", help='Specify the interface.  Example: --interface wlan0')
-	parser.add_argument('--clear', '-c', default="all", help='Clear redis data' )
+	parser.add_argument('--clear', '-c', default="", help='Clear redis data' )
+	parser.add_argument('--verbose', '-v', default="true", help='Verbosity: output to screen true/false' )
+	parser.add_argument('--url', '-u', default="https://wifi-me-niet.jerryhopper.com/api/donotfollowtest", help='Notify url' )
+
 	args = parser.parse_args()
-	clear_redis(args.interface)
-	iface = setup_monitor(args.interface)
-	print('\n' + '\033[93m' + 'Wifi-me-niet Scanner ('+ iface+') Started' + '\033[0m' + '\n')
+	global SETTINGS_VERBOSE, SETTINGS_NOTIFYURL
+	if args.url !="":
+		SETTINGS_NOTIFYURL = args.url
+	#
+	if args.verbose == "false":
+		SETTINGS_VERBOSE = False
+	else:
+		SETTINGS_VERBOSE = True
+	#
+	if SETTINGS_VERBOSE == True:
+		logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',filename='wifiscanner.log',level=logging.DEBUG) #setup logging to file
+	#
+	if SETTINGS_VERBOSE == True:
+		logging.info('\n'+'Wifi-me-niet Scanner Initialized'+ '\n') #announce that it has started to log file with yellow color
+	#
+	if SETTINGS_VERBOSE == True:
+		print('\n' + '\033[93m' + 'Wifi-me-niet Scanner Initialized' + '\033[0m' + '\n') #announce that it has started to command line with yellow color		(/n is newline)
+	#
+	clear_redis(args.clear)
+	iface = setup_monitor(args.interface,SETTINGS_VERBOSE)
+	if SETTINGS_VERBOSE == True:
+		print('\n' + '\033[93m' + 'Wifi-me-niet Scanner ('+ iface+') Started' + '\033[0m' + '\n')
+	sniff(iface=iface, prn=handle_packet, store=0, count=0)
 	try:
 		sniff(iface=iface, prn=handle_packet, store=0, count=0)
 	except:
@@ -141,11 +167,13 @@ def main():
 	sys.exit(1)
 
 def signal_exit(signal,frame):
-	print("Signal exit")
+	if SETTINGS_VERBOSE == True:
+		print("Signal exit")
 	sys.exit(1)
 
 def signal_handler(signal,frame):
-	print("Aborted by user.")
+	if SETTINGS_VERBOSE == True:
+		print("Aborted by user.")
 	os.system('kill -9 '+ str(os.getpid()))
 	sys.exit(1)
 
