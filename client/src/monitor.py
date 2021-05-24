@@ -10,19 +10,19 @@ def listToString(s):
 
 
 def list_wireless():
-	output = os.popen("iwconfig 2>&1 | grep ESSID | sed 's/\"//g' | cut -f1  -d' '").read()
+	output = os.popen("sudo iwconfig 2>&1 | grep IEEE | sed 's/\"//g' | cut -f1  -d' '").read()
 	result =  output.split('\n')[:-1]
 	result.sort()
 	return result
 
 def list_monitor_wireless():
-	output = os.popen("iwconfig 2>&1 | grep Monitor | sed 's/\"//g' | cut -f1  -d' '").read()
+	output = os.popen("sudo iwconfig 2>&1 | grep Monitor | sed 's/\"//g' | cut -f1  -d' '").read()
 	result =  output.split('\n')[:-1]
 	result.sort()
 	return result
 
 def is_kali():
-	output = os.popen("lsb_release -d|awk -F ' ' '{print $2}'").read().strip().upper()
+	output = os.popen("sudo lsb_release -d|awk -F ' ' '{print $2}'").read().strip().upper()
 	# print(output)
 	if output == "KALI" :
 		return True
@@ -96,8 +96,11 @@ def setup_monitor(iface,SETTINGS_VERBOSE):
 		return iface
 
 	# Generic device
+	iface = wireless_adapters[0]
+
 	print("Bringing down "+ iface +"")
 	try:
+		print('sudo ip link set ' + iface +' down')
 		os.system('sudo ip link set ' + iface +' down')
 	except:
 		if SETTINGS_VERBOSE == True:
@@ -105,7 +108,8 @@ def setup_monitor(iface,SETTINGS_VERBOSE):
 		sys.exit(1)
 	try:
 		if SETTINGS_VERBOSE == True:
-			print("Setting up monitor-mode on "+ iface +"")
+			print("Setting up monitor-mode on "+ iface )
+			print('iw '+ iface +' set monitor none')
 		os.system('iw '+ iface +' set monitor none')
 	except:
 		if SETTINGS_VERBOSE == True:
@@ -114,4 +118,5 @@ def setup_monitor(iface,SETTINGS_VERBOSE):
 	if SETTINGS_VERBOSE == True:
 		print("Bringing up "+ iface +"")
 	os.system('ip link set ' + iface +' up')
+
 	return iface
