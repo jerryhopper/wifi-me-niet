@@ -40,7 +40,7 @@ SETTINGS_VERBOSE=True
 # notify-url.
 SETTINGS_NOTIFYURL="https://wifi-me-niet.jerryhopper.com/api/donotfollowtest"
 
-
+SETTINGS_NOTIFYMAC="64:89:9A:4A:2B:05"
 
 
 r = redis.Redis(charset="utf-8", decode_responses=True)
@@ -119,10 +119,10 @@ def handle_packet(pkt):
 		# remove the colon's
 		shortmac = curmac.replace(":","")
 		# check if the shortmac has been seen in the last X minutes.
-		if seenrecently(shortmac) == 1:
+		if seenrecently(shortmac) == 1 and SETTINGS_NOTIFYMAC != curmac :
 			return
 		# check if the shortmac should be ingored.
-		if ignore(shortmac) == 0:
+		if ignore(shortmac) == 0 and SETTINGS_NOTIFYMAC != curmac :
 			set_received(shortmac,pkt)
 			#print( get_temp()+' '+str(datetime.now()) +' ' + pkt.addr1  +' ' + pkt.addr2  + ' '+ pkt.addr3 +' ' +' ** dbm: '+ str(pkt.dBm_AntSignal) +'  rate: ' + str(pkt.Rate)  + ' SSID:"' + str(pkt.info,'utf-8')+'"' )
 		#else:
@@ -159,12 +159,12 @@ def main():
 	iface = setup_monitor(args.interface,SETTINGS_VERBOSE)
 	if SETTINGS_VERBOSE == True:
 		print('\n' + '\033[93m' + 'Wifi-me-niet Scanner ('+ iface+') Started' + '\033[0m' + '\n')
-	sniff(iface=iface, prn=handle_packet, store=0, count=0)
+	#sniff(iface=iface, prn=handle_packet, store=0, count=0)
 	try:
 		sniff(iface=iface, prn=handle_packet, store=0, count=0)
 	except:
 		print("Exception!")
-	sys.exit(1)
+		sys.exit(1)
 
 def signal_exit(signal,frame):
 	if SETTINGS_VERBOSE == True:
